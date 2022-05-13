@@ -31,7 +31,6 @@ const scor_point = 0; //スコアポイント
 const sprite_size = 200; //スプライトの大きさ
 const horizon = 200 * scaleY; //水平位置
 const play_time = 700000; //プレイ時間(ミリ秒数)
-const move_point = 0; //プログラムが使用
 const move_dx = 10; //プレーむごと移動幅
 const interval_time = 10000; //敵キャラの出現間隔
 const player_animated_speed = 0.1; //プレイヤのアニメスピード
@@ -45,6 +44,7 @@ let score = null; //スコアラベル
 let bg_image = null; //背景イメージ
 let enemy_data = []; //敵キャラの保管用配列
 let item_data = []; //アイテムの保管用配列
+let move_point = 0; //プログラムが使用
 window.onload = () => {
     var _a;
     app = new PIXI.Application({
@@ -70,6 +70,27 @@ window.onload = () => {
     player.animationSpeed = player_animated_speed;
     player.play();
     app.stage.addChild(player);
+    // 効果作成
+    effect = PIXI.Sprite.from(app.loader.resources.ef_itemGet.url);
+    effect.x = -200;
+    effect.y = -200;
+    effect.visible = false;
+    app.stage.addChild(effect);
+    // スコア作成
+    score = new PIXI.Text("SCORE: 0", {
+        fill: 0xff0000,
+        fontFamily: 'Times',
+        fontSize: 48,
+        fontWeight: 'bold'
+    });
+    score.width = 500 * scaleX;
+    score.x = 50 * scaleX;
+    score.y = horizon + 300 * scaleY;
+    app.stage.addChild(score);
+    move_point = player.x;
+    app.stage.interactive = true;
+    app.stage.
+        on("pointertap", touch_scene);
     (_a = document.getElementById("msg")) === null || _a === void 0 ? void 0 : _a.addEventListener("pointerdown", () => {
         document.body.removeChild(document.getElementById("msg"));
         document.body.appendChild(app.view);
@@ -83,6 +104,9 @@ let create_player_texture = () => {
         player_animated_data[i] = new PIXI.Texture(plyer_base_texture, new PIXI.Rectangle(i * sprite_size, 0, sprite_size, sprite_size));
     }
     player = new PIXI.AnimatedSprite(player_animated_data);
+};
+let touch_scene = (event) => {
+    move_point = event.x - sprite_size / 2;
 };
 let gameLoop = (delta) => {
 };
