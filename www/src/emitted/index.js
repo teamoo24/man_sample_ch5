@@ -89,7 +89,7 @@ window.onload = () => {
     effect = PIXI.Sprite.from(app.loader.resources.ef_itemGet.url);
     effect.x = -200 * scaleX;
     effect.y = -200 * scaleY;
-    effect.visible = false;
+    effect.alpha = 0;
     app.stage.addChild(effect);
     // スコア作成
     score = new PIXI.Text("SCORE：0", {
@@ -200,7 +200,7 @@ let checkEnemy = () => {
             if (touch_dx > 0) {
                 effect.x = object.x;
                 effect.y = object.y;
-                effect.visible = true;
+                degress_opacity(effect);
                 update_score(100);
             }
             else {
@@ -224,7 +224,7 @@ let checkItem = () => {
         if (get_collision(object, player)) {
             effect.x = object.x;
             effect.y = object.y;
-            effect.visible = true;
+            degress_opacity(effect);
             app.stage.removeChild(object);
             item_data.splice(index, 1);
             update_score(300);
@@ -261,6 +261,9 @@ let update_score = (n) => {
     score_point += n;
     score_point = score_point < 0 ? 0 : score_point;
     score.text = "SCORE：" + score_point;
+};
+let degress_opacity = (object) => {
+    object.alpha = 1;
 };
 let gameEnd = () => {
     game_flg = false;
