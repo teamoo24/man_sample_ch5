@@ -4,7 +4,7 @@ import {preload} from "./preload.js"
 
 const sprite_size = 200; //スプライトの大きさ
 const horizon = 200; //水平位置
-const play_time = 100000; //プレイ時間(ミリ秒数)
+const play_time = 10000; //プレイ時間(ミリ秒数)
 const move_dx = 5; //プレーむごと移動幅
 const player_animated_speed = 0.1;//プレイヤのアニメスピード
 const scaleX = window.innerWidth/1280;
@@ -106,6 +106,7 @@ window.onload = () => {
         app.start();
         document.body.removeChild(<HTMLElement>document.getElementById("msg"))
         document.body.appendChild(app.view)
+        app.ticker.speed = .5;
         app.ticker.add(gameloop);
         setTimeout(makeEnemy, 1000);
         setTimeout(makeItem, 10000+ Math.floor(Math.random()*10)*1000);
@@ -282,6 +283,9 @@ let makeItem = () => {
 
     app.stage.addChild(pitem)
     item_data.push(pitem)
+    if(game_flg) {
+        setTimeout(makeItem, 5000+ Math.floor(Math.random() * 10) * 1000)
+    }
 
 } 
 
@@ -293,6 +297,10 @@ let update_score = (n:number) => {
 
 let degress_opacity = (object:PIXI.Sprite) => {
     object.alpha = 1;
+
+    setTimeout(()=> {
+        effect.alpha = 0;
+    }, 1000)
 }
 
 let gameEnd = () => {
@@ -308,5 +316,6 @@ let gameEnd = () => {
     msg.width = 800;
     app.stage.addChild(msg)
     
+    setTimeout(()=>app.stop(),1000)
     //app.stop();
 }

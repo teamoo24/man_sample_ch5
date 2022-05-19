@@ -27,7 +27,7 @@ const PIXI = __importStar(require("pixi.js"));
 const preload_js_1 = require("./preload.js");
 const sprite_size = 200; //スプライトの大きさ
 const horizon = 200; //水平位置
-const play_time = 100000; //プレイ時間(ミリ秒数)
+const play_time = 10000; //プレイ時間(ミリ秒数)
 const move_dx = 5; //プレーむごと移動幅
 const player_animated_speed = 0.1; //プレイヤのアニメスピード
 const scaleX = window.innerWidth / 1280;
@@ -109,6 +109,7 @@ window.onload = () => {
         app.start();
         document.body.removeChild(document.getElementById("msg"));
         document.body.appendChild(app.view);
+        app.ticker.speed = .5;
         app.ticker.add(gameloop);
         setTimeout(makeEnemy, 1000);
         setTimeout(makeItem, 10000 + Math.floor(Math.random() * 10) * 1000);
@@ -256,6 +257,9 @@ let makeItem = () => {
     pitem.y = horizon - Math.floor(Math.random() * sprite_size);
     app.stage.addChild(pitem);
     item_data.push(pitem);
+    if (game_flg) {
+        setTimeout(makeItem, 5000 + Math.floor(Math.random() * 10) * 1000);
+    }
 };
 let update_score = (n) => {
     score_point += n;
@@ -264,6 +268,9 @@ let update_score = (n) => {
 };
 let degress_opacity = (object) => {
     object.alpha = 1;
+    setTimeout(() => {
+        effect.alpha = 0;
+    }, 1000);
 };
 let gameEnd = () => {
     game_flg = false;
@@ -277,5 +284,6 @@ let gameEnd = () => {
     msg.y = 50;
     msg.width = 800;
     app.stage.addChild(msg);
+    setTimeout(() => app.stop(), 1000);
     //app.stop();
 };
